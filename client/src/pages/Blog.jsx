@@ -84,9 +84,9 @@ const Blog = () => {
         <div className='my-24 max-w-3xl mx-auto'>
           <p className='font-semibold my-4'>Share this article on Social media</p>
           <div className='flex'>
-            <img src={assets.facebook_icon} width={50} alt="" />
-            <img src={assets.twitter_icon} width={50} alt="" />
-            <img src={assets.googleplus_icon} width={50} alt="" />
+            <img src={assets.facebook_icon} width={50} alt="" className='cursor-pointer' />
+            <img src={assets.twitter_icon} width={50} alt="" className='cursor-pointer' />
+            <img src={assets.googleplus_icon} width={50} alt="" className='cursor-pointer' />
           </div>
         </div>
 
