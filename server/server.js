@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import connectDB from './config/db.js';
+import adminRouter from './routes/adminRoutes.js';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.get('/',(req,res) => res.send('Backend Sever is Working') )
+app.use('/api/admin',adminRouter)
 
 
 const PORT = process.env.PORT || 5000;
