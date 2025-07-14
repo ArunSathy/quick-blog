@@ -1,7 +1,23 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { assets } from '../assets/assets'
+import { useAppContext } from '../context/AppContext'
 
 const Header = () => {
+
+    const {setInput, input} = useAppContext();
+
+    const inputRef = useRef();
+
+    const onSubmitHandler = async (e) => {
+        e.preventDefault();
+        setInput(inputRef.current.value)
+    }
+
+    const onClear = () => {
+        setInput('');
+        inputRef.current.value = ''
+    }
+
     return (
         <div className='mx-8 sm:mx-16 xl:mx-24 relative'>
             <div className='text-center mt-20 mb-8'>
@@ -15,8 +31,9 @@ const Header = () => {
                     write without filters. Whether it's one word or a thousand, your story starts right here.
                 </p>
 
-                <form className='flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-white rounded overflow-hidden'>
-                    <input className='w-full pl-4 outline-none' type="text" placeholder='Search for blogs' required />
+                <form onSubmit={onSubmitHandler} className='flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-white rounded overflow-hidden'>
+                    <input ref={inputRef} className='w-full pl-4 outline-none' type="text" placeholder='Search for blogs' required />
+                    {input && <img src={assets.cross_black_icon} onClick={onClear} className='w-5 h-5 my-4 mx-2 cursor-pointer items-center object-contain'/>}
                     <button className='bg-primary text-white px-8 py-2 m-1.5 rounded hover:scale-105 transition-all cursor-pointer' type='submit'>Search</button>
                 </form>
 

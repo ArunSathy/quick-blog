@@ -57,11 +57,11 @@ export const getDashboard = async (req, res) => {
         const comments = await Comment.countDocuments();
         const drafts = await Blog.countDocuments({isPublished: false});
 
-        const dasboardData = {
+        const dashboardData = {
             blogs, comments, drafts, recentBlogs
         }
 
-        res.json({success: true, dasboardData})
+        res.json({success: true, dashboardData})
         
     } catch (error) {
         res.json({ success: false, message: error.message })

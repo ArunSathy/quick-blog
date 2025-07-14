@@ -24,6 +24,7 @@ import bin_icon from './bin_icon.svg'
 import comment_icon from './comment_icon.svg'
 import tick_icon from './tick_icon.svg'
 import star_icon from './star_icon.svg'
+import cross_black_icon from './cross_black_icon.svg'
 import cross_icon from './cross_icon.svg'
 import home_icon from './home_icon.svg'
 import gradientBackground from './gradientBackground.png'
@@ -53,6 +54,7 @@ export const assets = {
     gradientBackground,
     list_icon,
     cross_icon,
+    cross_black_icon,
     dashboard_icon_1,
     dashboard_icon_2,
     dashboard_icon_3,
