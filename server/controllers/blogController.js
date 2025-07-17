@@ -2,6 +2,7 @@ import fs from 'fs'
 import imagekit from '../config/imageKit.js';
 import Blog from '../models/Blog.js';
 import Comment from '../models/Comment.js';
+import main from '../config/gemini.js';
 
 // add a new blog 
 export const addBlog = async (req, res) => {
@@ -148,5 +149,18 @@ export const getBlogComments = async (req, res) => {
 
     } catch (error) {
         res.json({ success: false, message: error.message });
+    }
+}
+
+// generate AI content
+export const generateAIContent = async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        const content = await main(prompt + ' Generate a blog content for this topic in simple text format');
+
+        res.json({success: true, content});
+
+    } catch (error) {
+        res.json({success: false, message: error.message});
     }
 }

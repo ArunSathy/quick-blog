@@ -3,11 +3,13 @@ import { assets, blogCategories } from '../../assets/assets'
 import Quill from 'quill';
 import { useAppContext } from '../../context/AppContext';
 import toast from 'react-hot-toast';
+import { parse } from 'marked'
 
 const AddBlog = () => {
 
-  const {axios} = useAppContext();
+  const { axios } = useAppContext();
   const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const editorRef = useRef(null);
   const quillRef = useRef(null);
@@ -25,8 +27,8 @@ const AddBlog = () => {
       setIsAdding(true);
 
       const blog = {
-        title, 
-        subTitle, 
+        title,
+        subTitle,
         description: quillRef.current.root.innerHTML,
         category,
         isPublished
@@ -36,35 +38,51 @@ const AddBlog = () => {
       formData.append('blog', JSON.stringify(blog))
       formData.append('image', image)
 
-      const {data} = await axios.post('/api/blog/add',formData);
+      const { data } = await axios.post('/api/blog/add', formData);
 
-      if(data.success){
+      if (data.success) {
         toast.success(data.message);
         setImage(false);
         setTitle('')
         setSubTitle('')
         quillRef.current.root.innerHTML = ''
         setCategory('Startup')
-      }else{
+      } else {
         toast.error(data.message)
       }
     } catch (error) {
       toast.error(error.message)
-    }finally{
+    } finally {
       setIsAdding(false);
     }
   }
 
   const generateContent = async () => {
+    if (!title) return toast.error('Please enter the title');
+
+    try {
+      setLoading(true);
+      const { data } = await axios.post('/api/blog/generate', { prompt: title })
+
+      if (data.success) {
+        quillRef.current.root.innerHTML = parse(data.content)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    } finally {
+      setLoading(false)
+    }
 
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     // Initiate Quill only once
-    if(!quillRef.current && editorRef.current){
-      quillRef.current = new Quill(editorRef.current, {theme: 'snow'})
+    if (!quillRef.current && editorRef.current) {
+      quillRef.current = new Quill(editorRef.current, { theme: 'snow' })
     }
-  },[])
+  }, [])
 
   return (
     <form onSubmit={onSubmitHandler} className='flex-1 bg-blue-50/50 text-gray-600 h-full overflow-scroll'>
@@ -72,26 +90,31 @@ const AddBlog = () => {
 
         <p>Upload thumbnail</p>
         <label htmlFor="image">
-          <img src={ !image ? assets.upload_area : URL.createObjectURL(image)} alt="" className='mt-2 h-16 rounded cursor-pointer' />
-          <input onChange={(e)=>setImage(e.target.files[0])} type="file" id="image" hidden required/>
+          <img src={!image ? assets.upload_area : URL.createObjectURL(image)} alt="" className='mt-2 h-16 rounded cursor-pointer' />
+          <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" hidden required />
         </label>
 
         <p className='mt-4'>Blog title</p>
-        <input type="text" placeholder='Type here' required className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded' onChange={(e)=>setTitle(e.target.value) }value={title}/>
+        <input type="text" placeholder='Type here' required className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded' onChange={(e) => setTitle(e.target.value)} value={title} />
 
         <p className='mt-4'>Sub title</p>
-        <input type="text" placeholder='Type here' required className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded' onChange={(e)=>setSubTitle(e.target.value) }value={subTitle}/>
+        <input type="text" placeholder='Type here' required className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded' onChange={(e) => setSubTitle(e.target.value)} value={subTitle} />
 
         <p className='mt-4'>Blog Description</p>
         <div className='max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative'>
           <div ref={editorRef}></div>
-          <button type='button' onClick={generateContent} className='absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer'>Generate with AI</button>
+          {loading && (
+            <div className='absolute right-0 top-0 bottom-0 left-0 flex items-center justify-center bg-black/10 mt-2'>
+              <div className='w-8 h-8 rounded-full border-2 border-t-white animate-spin'></div>
+            </div>
+          )}
+          <button disabled={loading} type='button' onClick={generateContent} className='absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer'>Generate with AI</button>
         </div>
 
         <p className='mt-4'>Blog Category</p>
-        <select onChange={(e)=>setCategory(e.target.value)} name="category" className='mt-2 px-3 py-2 border text-gray-500 border-gray-300 outline-none rounded'>
+        <select onChange={(e) => setCategory(e.target.value)} name="category" className='mt-2 px-3 py-2 border text-gray-500 border-gray-300 outline-none rounded'>
           <option value="">Select category</option>
-          {blogCategories.map((item, index)=>{
+          {blogCategories.map((item, index) => {
             return <option key={index} value={item}>{item}</option>
           })}
         </select>
