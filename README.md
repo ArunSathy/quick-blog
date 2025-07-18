@@ -11,20 +11,20 @@ Additionally, the app ensures persistent storage of blogs and comments using Mon
 
 **Features**
 
-User registration and login (authentication with JWT)
-Blog Creation – Write blog titles and generate smart descriptions using Google Gemini API.
-Commenting System – Users can comment on blogs, stored in MongoDB.
-Blog Feed – View a dynamic list of all blogs from users.
-AI-Powered Content – Automatically generate blog descriptions based on the title using Gemini AI.
-Responsive design for mobile and desktop
+1. User registration and login (authentication with JWT)
+2. Blog Creation – Write blog titles and generate smart descriptions using Google Gemini API.
+3. Commenting System – Users can comment on blogs, stored in MongoDB.
+4. Blog Feed – View a dynamic list of all blogs from users.
+5. AI-Powered Content – Automatically generate blog descriptions based on the title using Gemini AI.
+6. Responsive design for mobile and desktop
 
 **Technologies Used**
 
-Frontend: React.js, Tailwind CSS
-Backend: Node.js, Express.js
-Database: MongoDB
-Authentication: JSON Web Token (JWT)
-API: Axios for API requests
-Description content creation : Google Gemini
+1. Frontend: React.js, Tailwind CSS
+2. Backend: Node.js, Express.js
+3. Database: MongoDB
+4. Authentication: JSON Web Token (JWT)
+5. API: Axios for API requests
+6. Description content creation : Google Gemini
 
 **Live Link** : https://quick-blog-chi-six.vercel.app
